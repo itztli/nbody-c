@@ -13,7 +13,10 @@ Population new_Population(char *name, int size){
   population.n_elements=0;
   population.size = size;
   population.element = malloc(size * sizeof(Element));
-  population.distance = malloc(total_sum(size)*sizeof(float));
+  //printf("malloc %i\n",total_sum(size));
+  population.n_distance = total_sum(size);
+  population.distance = malloc(population.n_distance*sizeof(float));
+
   return population;
 
 }
@@ -31,9 +34,9 @@ int print_Population(Population population){
   for(i=0;i<population.n_elements;i++){
     print_Element(population.element[i]);
   }
-  n = sizeof(population.distance)/sizeof(float);
-  printf("List of distances\n");
-  for(i=0;i<n ;i++){
+  //n = sizeof(population.distance)/sizeof(float);  
+  printf("List of distances %i\n",population.n_distance);
+  for(i=0;i< population.n_distance ;i++){
     printf("%lf\t",population.distance[i]);
   }
   printf("\n");

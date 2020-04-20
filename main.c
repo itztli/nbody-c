@@ -18,12 +18,13 @@ int main(int argn, char **args){
   population = new_Population("2 body system",N);
   add_element_to_population(&population, a1);
   add_element_to_population(&population, a2);
-  print_Population(population);
 
   population.distance[0] = compute_distance(population.element[0],population.element[1]);
+
   //compute_distance(population,0,2);
   //compute_distance(population,1,2);
 
+  print_Population(population);
   
 
 
