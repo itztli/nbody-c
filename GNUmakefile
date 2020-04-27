@@ -34,12 +34,12 @@
 # Make declarations
 
 CC := gcc
-LINKER := gcc
+LINKER := mpicc
 CFLAGS := -g -ggdb -O
 LDFLAGS := 
 CFILES := $(wildcard *.c)
 OBJS := $(patsubst %.c, %.o, $(CFILES))
-PROGRAM := nbody
+PROGRAM := nbodympi
 RM := rm -f
 INSTALAR := cp $(PROGRAM) /usr/bin/
 

@@ -35,13 +35,47 @@ int print_Population(Population population){
     print_Element(population.element[i]);
   }
   //n = sizeof(population.distance)/sizeof(float);  
+  /*
   printf("List of distances %i\n",population.n_distance);
   for(i=0;i< population.n_distance ;i++){
     printf("%lf\t",population.distance[i]);
   }
   printf("\n");
-
+  */
   
   return 1;
 }
+
+int print_distances(Population population, int begin, int end){
+  int i;
+  int n;
+  
+  //n = sizeof(population.distance)/sizeof(float);  
+  
+  //printf("List of distances %i\n",population.n_distance);
+  for(i=begin;i < end ;i++){
+    printf("%lf\t",population.distance[i]);
+  }
+  printf("\n"); 
+  return 1;
+}
+
+int write_distances(char *path,Population population, int begin, int end, int miproc){
+  int i;
+  int n;
+  FILE *f;
+  char filename[256];
+  //n = sizeof(population.distance)/sizeof(float);  
+  //printf("List of distances %i\n",population.n_distance);
+  sprintf(filename,"%s/distances-%i.dat",path,miproc);
+  f = fopen(filename,"w");
+  for(i=begin;i < end ;i++){
+    fprintf(f,"%i\t%lf\n",i,population.distance[i]);
+  }
+  fflush(f);
+  fclose(f);
+  //printf("\n"); 
+  return 1;
+}
+
 

@@ -19,7 +19,9 @@ extern "C" {
   Population new_Population(char *name, int size);
   int add_element_to_population(Population *population, Element element);
   int print_Population(Population population);
-
+  int print_distances(Population population, int begin, int end);
+  int write_distances(char *path,Population population, int begin, int end, int miproc);
+  
 #ifdef __cplusplus
 } /* extern "C" */
 #endif /* __cplusplus */
