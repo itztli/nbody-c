@@ -24,20 +24,22 @@
 #include "population.h"
 #include "recipes.h"
 
-
-
 int main(int argn, char **args){
   Element a1,a2;
   Population population;
   float *distance;
   int N = 100;
-  int i,j,k;
+  int i,j,k,m;
   int miproc;
   int numproc;
   int begin,end;
   char filenameIn[256],filenameOut[256];
   FILE *in,*out;
-  boolean verbose = false;
+  boolean verbose = true;
+  boolean output = false;
+  MPI_Status status;
+  float *buffer;
+  float *data;
   
   MPI_Init (&argn, &args); /* Inicializar MPI */
   MPI_Comm_rank(MPI_COMM_WORLD,&miproc); /* Determinar el rango
@@ -71,6 +73,8 @@ ro de procesos */
     }
   }
 
+  data = malloc(sizeof(float)* (end-begin));
+  m=0;
   
   for(i=0;i<population.n_elements-1;i++){
     //for(j=i+1 ;j<population.n_elements;j++){
@@ -78,30 +82,67 @@ ro de procesos */
       if ((begin<=k) && (k<end)){
       //printf("%i,%i\n",i,j);
 	  population.distance[k] = compute_distance(population.element[i],population.element[j]);
+	  data[m] = population.distance[k];
+	  m++;
 	}
       k++;
     }
   }
-  
+
+  if (miproc > 0){
+    //for(j=0;j<end-begin;j++){ 
+    //	printf("before[%i]=%lf\n",j,data[j]);
+    //  }
+
+    MPI_Send(data, end-begin, MPI_FLOAT, 0, 99, MPI_COMM_WORLD);
+  }else{
+    for (i = 1; i < numproc; i++){
+      begin = (population.n_distance/numproc)*i;
+      end = (population.n_distance/numproc)*(i+1);
+
+      if (numproc == (i+1)){
+	//printf("last processor %i\t%i\n",end, population.n_elements);
+	if (end < population.n_distance){
+	  end = population.n_distance;
+	}
+      }
+      buffer = malloc(sizeof(float)*(end-begin));
+      MPI_Recv(buffer, end-begin , MPI_FLOAT, i, 99, MPI_COMM_WORLD, &status);
+      for(j=0;j<end-begin;j++){ 
+	population.distance[begin+j] = buffer[j];
+	//printf("distance[%i]=%lf\n",begin+j,population.distance[begin+j]);
+      }
+      free(buffer);
+      
+    }
+  }
+    
   //  population.distance[0] = compute_distance(population.element[0],population.element[1]);
-  write_distances("output/",population,begin,end,miproc);
+
+  if(output){
+    write_distances("output/",population,begin,end,miproc);
+  }
   
   MPI_Barrier (MPI_COMM_WORLD);
   
   if (miproc==0){
     //merge all the ouput archives
-    sprintf(filenameOut,"%s/distances.dat","output/");
-    out = fopen(filenameOut, "w"); //opening the file for writing.
-    for(i=0;i<numproc ;i++){
-      sprintf(filenameIn,"%s/distances-%i.dat","output/",i);
-      in = fopen(filenameIn, "r"); //opening the file for reading.
-      write_block(in,out);
-      fclose(in);
+
+    if(output){
+      sprintf(filenameOut,"%s/distances.dat","output/");
+      out = fopen(filenameOut, "w"); //opening the file for writing.
+      for(i=0;i<numproc ;i++){
+	sprintf(filenameIn,"%s/distances-%i.dat","output/",i);
+	in = fopen(filenameIn, "r"); //opening the file for reading.
+	write_block(in,out);
+	fclose(in);
+      }
+      fclose(out);
     }
-    fclose(out);    
 
     if (verbose){
       print_Population(population);
+      print_distances(population,0, population.n_distance);
     }
 
 
