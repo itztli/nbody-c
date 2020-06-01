@@ -6,12 +6,12 @@ extern "C" {
 #endif /* __cplusplus */
 
   typedef struct{
-    float mass; //kg
-    float position[2]; //[x,y] m
-    float velocity[2]; // [x,y] m/s
+    double mass; //kg
+    double position[3]; //[x,y,z] m
+    double velocity[3]; // [x,y,z] m/s
   }Element;
 
-  Element new_Element(float mass, float p0, float p1, float v0, float v1);
+  Element new_Element(double mass, double p0, double p1, double p2, double v0, double v1, double v2);
   int print_Element(Element element);
 
 #ifdef __cplusplus

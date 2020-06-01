@@ -15,7 +15,7 @@ Population new_Population(char *name, int size){
   population.element = malloc(size * sizeof(Element));
   //printf("malloc %i\n",total_sum(size));
   population.n_distance = total_sum(size);
-  population.distance = malloc(population.n_distance*sizeof(float));
+  population.distance = malloc(population.n_distance*sizeof(double));
 
   return population;
 
@@ -30,7 +30,7 @@ int add_element_to_population(Population *population, Element element){
 int print_Population(Population population){
   int i;
   int n;
-  printf("List of elements\n");
+  //printf("%i\n",population.n_elements);
   for(i=0;i<population.n_elements;i++){
     print_Element(population.element[i]);
   }

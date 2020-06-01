@@ -14,7 +14,7 @@ typedef int boolean;
 
   
   unsigned long factorial(unsigned long f);
-  float compute_distance(Element A, Element B);
+  double compute_distance(Element A, Element B);
   int write_block(FILE *in, FILE *out);
   
 #ifdef __cplusplus

@@ -12,7 +12,7 @@ extern "C" {
     int n_elements; //number of elements
     int size; //max number of elements
     Element *element; // List of elements
-    float *distance; //List of distance between elements
+    double *distance; //List of distance between elements
     int n_distance; //number of computed distances
   }Population;
 

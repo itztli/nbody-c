@@ -1,9 +1,10 @@
 #include <math.h>
 #include <stdio.h>
+#include <string.h>
 #include "recipes.h"
 
-float compute_distance(Element A, Element B){
-  float x_a,x_b, y_a,y_b;
+double compute_distance(Element A, Element B){
+  double x_a,x_b, y_a,y_b;
   x_a = A.position[0];
   y_a = A.position[1];
   x_b = B.position[0];
